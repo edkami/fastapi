@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+            <!-- Cabeçalho -->
+                <div class="page-header">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="title">
+                                <h4>Cadastro</h4>
+                            </div>
+                            <nav aria-label="breadcrumb" role="navigation">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="index">Cadastro</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Novo Usuário</li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cabeçalho Cadastro -->
+                <div class="pd-20 card-box mb-30">
+                    <div class="clearfix">
+                        <div class="pull-left">
+                            <h4 class="text-blue h4">Cadastrar Novo Usuário</h4>
+                            <p class="mb-30">Cadastrar novo usuário</p>
+                        </div>
+                    </div>
+                    <form action="/users" method="POST">
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Usuário</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="text" name="username" placeholder="edkami">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Senha</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="password" name="password" placeholder="*****">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Nome</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="text" name="nome" placeholder="Eduardo">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Sobrenome</label>
+                            <div class="col-sm-12 col-md-10">
+                                <input class="form-control" type="text" name="sobrenome" placeholder="Kami">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Sexo</label>
+                            <div class="col-sm-12 col-md-10">
+                                <select class="custom-select col-12" name="sexo">
+                                    <option selected="">Escolha...</option>
+                                    <option value="Masculino" name="sexo">Masculino</option>
+                                    <option value="Feminino" name="sexo">Feminino</option>
+                                    <option value="Não Informado" name="sexo">Não Informado</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Estado</label>
+                            <div class="col-sm-12 col-md-10">
+                                <select id="estado" class="custom-select col-12" name="estado">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-12 col-md-2 col-form-label">Cidade</label>
+                            <div class="col-sm-12 col-md-10">
+                                <select id="cidade" class="custom-select col-12" name="cidade">
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </form>
+
+                </div>
+                <div class="footer-wrap pd-20 mb-20 card-box">
+                            Mantido por <a href="https://github.com/edkami" target="_blank">EdKami</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script language="javascript">
+    $('#estado').change(function() {populateCidade()});
+    var cidades = {{ cidades|safe }}
+    var estados = {{ estados|safe }}
+    populateEstado();
+
+    function populateEstado() {
+        $("#estado").empty();
+        $("#estado").append('<option value="" disabled selected>Selecione um estado</option>');
+        $.each(estados, function(v) {
+            $('#estado')
+                .append($("<option></option>")
+                .attr("value", estados[v])
+                .text(estados[v]));
+        })
+    }
+
+    function populateCidade(event) {
+        estado = $("#estado option:selected" ).text();
+        $("#cidade").empty();
+
+        $("#cidade").append('<option value="" disabled selected>Selecione uma cidade</option>');
+        for (let [b, bcidade] of Object.entries(cidades)) {
+            if (b==estado) {
+                for (cidade in bcidade) {
+                    $('#cidade')
+                        .append($("<option></option>")
+                        .attr("value", bcidade[cidade])
+                        .text(bcidade[cidade]));
+                }
+            }
+        }
+
+    }
+
+</script>
+{% endblock %}
